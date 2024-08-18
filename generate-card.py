@@ -5,8 +5,7 @@ from io import BytesIO
 
 app = Flask(__name__)
 
-# Carrega a fonte (você precisa ter essa fonte ou uma similar na mesma pasta)
-FONT_PATH = "Roboto-Regular.ttf"
+# Usar uma fonte padrão
 FONT_SIZE = 24
 LEVEL_FONT_SIZE = 18
 NAME_COLOR = (255, 105, 180)
@@ -51,9 +50,14 @@ def generate_card():
     filled_width = int((xp_current / xp_max) * bar_width)
     draw.rectangle([(bar_x, bar_y), (bar_x + filled_width, bar_y + bar_height)], fill=bar_color) # Barra preenchida
     
+    # Usar fonte padrão do sistema
+    try:
+        font = ImageFont.load_default()
+        level_font = ImageFont.load_default()
+    except Exception as e:
+        return f"Erro ao carregar fonte: {e}", 500
+    
     # Desenhar o nome e nível
-    font = ImageFont.truetype(FONT_PATH, FONT_SIZE)
-    level_font = ImageFont.truetype(FONT_PATH, LEVEL_FONT_SIZE)
     draw.text((160, 120), name, font=font, fill=name_color)
     draw.text((card_width - 100, 170), f"Level - {level}", font=level_font, fill=name_color)
     
